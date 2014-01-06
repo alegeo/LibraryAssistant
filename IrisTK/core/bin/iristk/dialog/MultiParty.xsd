@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema elementFormDefault="qualified"
+    targetNamespace="iristk.dialog.MultiParty"
+    xmlns="http://www.w3.org/2001/XMLSchema" xmlns:flow="iristk.flow">
+    <import namespace="iristk.flow" schemaLocation="flow.xsd"/>
+    <element name="attend">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+            <attribute default="'headpose'" name="mode" type="string"/>
+            <attribute default="'nobody'" name="target" type="string"/>
+        </complexType>
+    </element>
+    <element name="attendNobody">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="attendRandom">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="attendOther">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+            <attribute default="'headpose'" name="mode" type="string"/>
+        </complexType>
+    </element>
+    <element name="attendAll">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="attendAsleep">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="say">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+            <attribute name="text" type="string"/>
+        </complexType>
+    </element>
+    <element name="listen">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+            <attribute default="8000" name="timeout" type="string"/>
+            <attribute name="grammar" type="string"/>
+        </complexType>
+    </element>
+    <element name="onEnterAgent">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="onLeaveAttending">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="onLeaveOther">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="onNoSpeech">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="onSpeech">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <attribute default="'attending'" name="agent">
+                        <simpleType>
+                            <restriction base="string">
+                                <enumeration value="'any'"/>
+                                <enumeration value="'attending'"/>
+                                <enumeration value="'other'"/>
+                                <enumeration value="'both'"/>
+                                <enumeration value="'nobody'"/>
+                            </restriction>
+                        </simpleType>
+                    </attribute>
+                    <attribute name="text" type="string"/>
+                    <attribute name="sem" type="string"/>
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+</schema>

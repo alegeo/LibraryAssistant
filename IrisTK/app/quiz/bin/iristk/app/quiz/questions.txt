@@ -1,0 +1,30 @@
+﻿Question;CorrectAnswer;Answer2;Answer3;Answer4;Category
+The Mau Mau were terrorists in which country late 50s early 60s?;Kenya;Sudan;Malaysia;Ghana;History
+What was the name of the atom bomb dropped on Hiroshima?;Little Boy;Bad Boy;Fat Boy;Good Boy;History
+What are the cannibalistic beasts called in H.G. Wells book The Time Machine?;Morlocks;Warlocks;Yahoos;Triffids;Literature
+Whose autobiography was entitled 'The Long Walk To Freedom'?;Nelson Mandela;Mahatma Gandhi;Lenin;Martin Luther King;Literature
+Who does Mr Brownlow rescue?;Oliver Twist;Tom Jones;Huckleberry Finn;Tom Brown;Literature
+In which book is there an inn called Admiral Benbow?;Treasure Island;Peter Pan;Lord of the Rings;Gullivers Travels;Literature
+In the book The Last Of The Mohicans what was the name of Chingachgook's only son?;Uncas;Mingo;Lightfoot;Magua;Literature
+In which Italian city do Romeo and Juliet live?;Verona;Naples;Milano;Pisa;Literature
+Who managed the punk group The Sex Pistols?;Malcolm McClaren;John Lydon;Sid Vicious;They were unmanagable;Music
+Barry Manilow had a hit with which song?;Mandy;Randy;Candy;Dandy;Music
+Which ship was a hit for the Beach Boys?;Sloop John B.;Proud Mary;Mississippi Quenn;Rainbow Warrior;Music
+Who appeared a record 106 times on Top Of The Pops?;Status Quo;Adam and the Ants;T-Rex;The England World Cup Squad;Music
+What was a hit for the Pretenders?;Stop your sobbing;Crying in the rain;Tears on my pillow;Tears of a clown;Music
+Which animal was a hit for Jefferson Airplane?;White Rabbit;White Horses;White Dove;Ride a white Swan;Music
+What is Smokey Robinson's real name?;William Robinson;Joe Robinson;Smokey Robinson;Samuel Robinson;Music
+Which band was not a trio?;Wings;America;ELP;Cream;Music
+What lives in a Formicarium?;Ants;Turtles;Apes;Butterflies;Science
+Who said 'nature abhors a vacuum'?;Galileo;Einstein;Aristotle;Newton;Science
+Which of the following animals are not rodents?;Hedgehogs;Rats;Gophers;Chipmunks;Science
+How many holes are there on a ten pin bowling ball?;3;4;2;5;Sport
+How many Olympic gold medals did mark Spitz win in Munich in 1972?;7;8;6;5;Sport
+Which sport is played at Hickstead?;Show Jumping;Rally Car Racing;Cricket;Polo;Sport
+'Wedel' is a term in which sport?;Skiing;Darts;Chess;Formula One;Sport
+Figure skating champion Elvis Stojko was from which country?;Canada;Russia;USA;Bulgaria;Sport
+Which NHL hockey team has won the most Stanley Cups?;Montreal Canadiens;Toronto Maple Leafs;Boston Bruins;New York Rangers;Sport
+A 'Miller' is a move in which sport?;Trampolining;Diving;Chess;Ice Hockey;Sport
+Who was dubbed the Elephant Man?;John Merrick;John McCririck ;John McEnroe;John Martin;TV & Film
+Duchess is a cat in which film ?;Aristocats;Lethal Weapon;101 Dalmatians;Men In Black;TV & Film
+Which of the following was not a character in Disney's Pocahontas?;Mooky;Flit;Chief Powhatan;Lon;TV & Film

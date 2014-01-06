@@ -1,0 +1,20 @@
+<package name="core">
+	<run>
+		<program name="broker" class="iristk.system.Broker"/>
+		<program name="tts" class="iristk.speech.TestSynth"/>
+		<program name="asr" class="iristk.speech.TestRecognizer"/>
+	</run>
+	<classpath>
+		<src path="src" output="bin"/>
+		<lib path="lib/commons.jar"/>
+		<lib path="lib/platform.jar"/>
+		<lib path="lib/jna.jar"/>
+		<lib path="lib/jnaerator-0.9.5.jar"/>
+		<lib path="lib/jung-2.0.jar"/>
+		<lib path="lib/rhino-1.7.jar"/>
+		<lib path="lib/JAsioHost.jar"/>
+		<lib path="lib/jportaudio.jar"/>
+		<lib path="lib/json.jar"/>
+		<lib path="lib/jetty.jar"/>
+	</classpath>
+</package>

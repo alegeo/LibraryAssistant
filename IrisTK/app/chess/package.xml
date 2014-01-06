@@ -1,0 +1,8 @@
+<package name="chess">
+	<run>
+		<program name="chess" class="iristk.app.chess.ChessSystem"/>
+	</run>
+	<classpath>
+		<src path="src" output="bin"/>
+	</classpath>
+</package>

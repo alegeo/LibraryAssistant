@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flow name="QuizFlow" package="iristk.app.quiz" 
+	initial="Idle" xmlns="iristk.flow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mp="iristk.dialog.MultiParty"
+	xmlns:p="iristk.flow.param"
+	xsi:schemaLocation="iristk.flow flow.xsd iristk.dialog.MultiParty MultiParty.xsd">
+	
+	<var name="mp" type="iristk.dialog.MultiParty" value="new iristk.dialog.MultiParty()"/>
+	<var name="users" type="iristk.dialog.UserModel" value="mp.users"/>
+	<var name="question" type="Question"/>
+	<var name="questions" type="QuestionSet" value="new QuestionSet()"/>
+	<var name="guess" type="int" value="0"/>
+		
+	<state id="Idle">
+		<onEntry>
+			<mp:attendNobody/>
+		</onEntry>
+		<mp:onEnterAgent>
+			<exec>users:(event:agent):score = 0</exec>
+			<mp:attend target="event:agent" />
+			<goto state="Greeting" />
+		</mp:onEnterAgent>
+	</state>
+	
+	<state id="Dialog">
+		<mp:onLeaveAttending>
+			<if cond="users.hasUser()">
+				<mp:attendRandom/>
+				<goto state="NextQuestion" />
+			<else />
+				<goto state="Goodbye"/>
+			</if>
+		</mp:onLeaveAttending>
+		<mp:onEnterAgent>
+			<exec>users:(event:agent):score = 0</exec>
+		</mp:onEnterAgent>
+	</state>
+	
+	<state id="Greeting" extends="Dialog">
+		<onEntry>
+			<mp:say>Would you like to play a game with me?</mp:say>
+			<mp:listen/>
+		</onEntry>
+		<mp:onSpeech sem="'yes'">
+			<mp:say>Great, let's start</mp:say>
+			<exec>question = questions.next()</exec>
+			<goto state="ReadQuestion"/>
+		</mp:onSpeech>
+		<mp:onSpeech>
+			<mp:say>Come on,</mp:say>
+			<reentry/>
+		</mp:onSpeech>
+		<mp:onNoSpeech>
+			<reentry/>
+		</mp:onNoSpeech>
+	</state>
+	
+	<state id="NextQuestion" extends="Dialog">
+		<onEntry>
+			<exec>question = questions.next();guess=0</exec>
+			<if cond="users.hasMultiUsers()">
+				<random>
+					<mp:attendAll/>
+					<mp:attendOther/>
+				</random>
+			</if>
+			<goto state="ReadQuestion"/>
+		</onEntry>
+	</state>
+	
+	<state id="ReadQuestion" extends="Dialog">
+		<onEntry>
+			<mp:say><expr>question.getFullQuestion()</expr></mp:say>
+			<goto state="AwaitAnswer"/>
+		</onEntry>
+	</state>
+	
+	<state id="AwaitAnswer" extends="Dialog">
+		<onEntry>
+			<!-- Both the default grammar and the answers to the question are used here -->
+			<mp:listen>
+				<p:grammar>default</p:grammar>
+				<p:grammar><expr>question.getId()</expr></p:grammar>
+			</mp:listen>
+		</onEntry>
+		<mp:onNoSpeech>
+			<mp:say>Why don't you make a guess</mp:say>
+			<goto state="AwaitAnswer"/>
+		</mp:onNoSpeech>
+		<mp:onSpeech agent="'both'">
+			<if cond="eq(event:agent1:sem:answer,question:correct)">
+				<mp:attend target="event:agent1:agent"/>
+				<goto state="CorrectAnswer"/>
+			<elseif cond="eq(event:agent2:sem:answer,question:correct)"/>
+				<mp:attend target="event:agent2:agent"/>
+				<goto state="CorrectAnswer"/>
+			<else/>
+				<mp:say>None of you were correct, let's try another question.</mp:say>
+				<goto state="NextQuestion"/>
+			</if>
+		</mp:onSpeech>
+		<mp:onSpeech agent="'other'">
+			<mp:attendOther mode="'eyes'"/>
+			<mp:say>You were not supposed to answer that</mp:say>
+			<mp:attendOther mode="'eyes'"/>
+			<mp:say>So, what is your answer?</mp:say>
+			<goto state="AwaitAnswer" p:read="false"/>
+		</mp:onSpeech>
+		<mp:onSpeech sem="'dontknow'">
+			<mp:say>Give me your best guess</mp:say>
+			<goto state="AwaitAnswer"/>
+		</mp:onSpeech>
+		<mp:onSpeech>
+			<if cond="eq(event:sem:answer,question:correct)">
+				<goto state="CorrectAnswer"/>
+				<else/>
+				<goto state="IncorrectAnswer"/>
+			</if>
+		</mp:onSpeech>
+	</state>
+	
+	<state id="CorrectAnswer" extends="Dialog">
+		<onEntry>
+			<exec>users:current:score = int(users:current:score) + 1</exec>
+			<mp:say>That is correct</mp:say>
+			<if cond="int(users:current:score) == 3">
+				<goto state="Winner"/>
+			</if>
+			<goto state="NextQuestion"/>
+		</onEntry>
+	</state>
+	
+	<state id="IncorrectAnswer" extends="Dialog">
+		<onEntry>
+			<mp:say>That was wrong</mp:say>
+			<if cond="users.hasMultiUsers() and guess == 0">
+				<exec>guess++</exec>
+				<mp:attendOther/>
+				<mp:say>Maybe you know the answer?</mp:say>
+				<goto state="AwaitAnswer"/>
+			</if>
+			<mp:say>The correct answer was <expr>question:(question:correct)</expr></mp:say>
+			<goto state="NextQuestion"/>
+		</onEntry>
+	</state>
+	
+	<state id="Winner" extends="Dialog">
+		<onEntry>
+			<mp:say>Congratulations, you are the winner</mp:say>
+			<mp:attendOther/>
+			<mp:say>I am sorry, but you are a looser.</mp:say>
+			<goto state="Goodbye"/>
+		</onEntry>
+	</state>
+
+	<state id="Goodbye" extends="Idle">
+		<onEntry>
+			<mp:say>Have a nice day.</mp:say>
+			<goto state="Idle"/>
+		</onEntry>
+	</state>
+	
+</flow>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:m="iristk.event"
+	elementFormDefault="qualified" targetNamespace="iristk.event">
+	
+	<complexType name="recordType">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<group ref="m:value"></group>
+		</sequence>
+	</complexType>
+
+	<element name="event">
+		<complexType>
+			<complexContent>
+				<extension base="m:recordType">
+					<attribute name="name" type="string"></attribute>
+					<attribute name="sender" type="string"></attribute>
+					<attribute name="time" type="string"></attribute>
+					<attribute name="id" type="string"></attribute>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<group name="value">
+		<choice>
+			<element ref="m:record" />
+			<element ref="m:list" />
+			<element ref="m:string" />
+			<element ref="m:float" />
+			<element ref="m:int" />
+			<element ref="m:bool" />
+			<element ref="m:xml" />
+		</choice>
+	</group>
+
+	<element name="string">
+		<complexType>
+			<simpleContent>
+				<extension base="string">
+					<attribute name="name" type="string"></attribute>
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="float">
+		<complexType>
+			<simpleContent>
+				<extension base="float">
+					<attribute name="name" type="string"></attribute>
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="int">
+		<complexType>
+			<simpleContent>
+				<extension base="int">
+					<attribute name="name" type="string"></attribute>
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="bool">
+		<complexType>
+			<simpleContent>
+				<extension base="boolean">
+					<attribute name="name" type="string"></attribute>
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="record">
+		<complexType>
+			<complexContent>
+				<extension base="m:recordType">
+					<attribute name="name" type="string"></attribute>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="expr">
+		<complexType>
+			<simpleContent>
+				<extension base="string"/>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="xml">
+		<complexType mixed="true">
+			<sequence>
+				<any processContents="skip" namespace="##any" minOccurs="0"
+					maxOccurs="unbounded" />
+			</sequence>
+			<attribute name="name" type="string"></attribute>
+		</complexType>
+	</element>
+
+	<element name="list">
+		<complexType>
+			<complexContent>
+				<extension base="m:recordType">
+					<attribute name="name" type="string"></attribute>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+<!-- 
+	<element name="system">
+		<complexType>
+			<sequence>
+				<group ref="m:value" minOccurs="0" maxOccurs="unbounded"/>
+				<element name="component" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<choice minOccurs="0" maxOccurs="unbounded">
+							<group ref="m:value"/>
+							<element name="comp">
+								<complexType>
+									<simpleContent>
+										<extension base="string">
+											<attribute name="name" type="string"></attribute>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+						</choice>
+						<attribute name="name" use="required" type="string"/>
+						<attribute name="class" use="optional" type="string"/>
+					</complexType>
+				</element>
+			</sequence>
+			<attribute name="name" use="required" type="string"/>
+			<attribute name="lang" use="required" type="string"/>
+		</complexType>
+	</element>
+ -->
+</schema>

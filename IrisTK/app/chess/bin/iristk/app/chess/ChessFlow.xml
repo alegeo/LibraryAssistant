@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flow name="ChessFlow" package="iristk.app.chess" initial="Start"
+	xmlns="iristk.flow" xmlns:p="iristk.flow.param" xmlns:d="iristk.dialog.SimpleDialog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="iristk.flow flow.xsd iristk.dialog.SimpleDialog SimpleDialog.xsd">
+
+	<var name="chess" type="ChessGame" value="null"/>
+
+	<state id="Game">
+		<onEvent name="chess.restart">
+			<d:say>Okay, let's restart</d:say>
+			<goto state="AwaitUser"/>
+		</onEvent>
+	</state>
+
+	<state id="Start" extends="Game">
+		<onEntry>
+			<d:say>Okay, let's start</d:say>
+			<goto state="AwaitUser"/>
+		</onEntry>     
+	</state>
+
+	<state id="AwaitUser" extends="Game">
+		<onEntry>
+			<d:say>What is your move?</d:say>
+			<d:listen/>
+		</onEntry>     
+		<onEvent name="chess.move.user">
+			<exec>chess.identifyMoves(record(event:move));</exec>
+			<if cond="chess.availableMoves() == 1">
+				<goto state="PerformMove"/>
+			<elseif cond="chess.availableMoves() == 0" />
+				<d:say>Sorry, I can't do that</d:say>
+				<goto state="AwaitUser" /> 
+			<else />
+				<exec>chess.displayAvailableMoves();</exec>
+				<exec>Record clarify = chess.chooseClarification()</exec>
+				<if cond="clarify:steps">
+					<goto state="ClarifySteps" p:lastMove="event:move"/>
+					<elseif cond="clarify:direction" />
+					<goto state="ClarifyDirection" p:lastMove="event:move"/>
+					<elseif cond="clarify:piece" />
+					<goto state="ClarifyPiece" p:piece="clarify:piece" p:lastMove="event:move"/>
+					<elseif cond="clarify:square" />
+					<goto state="ClarifySquare" p:lastMove="event:move"/>
+				</if>
+			</if>   
+		</onEvent>
+		<d:onSpeech sem="'act_move'">
+			<exec>chess.newMove()</exec>
+			<raise event="chess.move.user" p:move="event:sem"/>
+		</d:onSpeech>
+		<d:onSpeech>
+			<d:say>Sorry, I didn't get that</d:say>
+			<reentry />
+		</d:onSpeech>
+		<d:onNoSpeech>
+			<d:say>Sorry</d:say>
+			<reentry />
+		</d:onNoSpeech>
+	</state>
+	
+	<state id="PerformMove" extends="Game">
+		<onEntry>
+			<d:say>Okay</d:say>
+			<exec>chess.performMove()</exec>
+			<goto state="AwaitSystem" />
+		</onEntry>
+	</state>
+
+	<state id="ClarifySteps" extends="AwaitUser">
+		<param name="lastMove" type="Record"/>
+		<onEntry>
+			<d:say>How many steps?</d:say>
+			<d:listen/>
+		</onEntry>
+		<d:onSpeech sem="'number'">
+		 	<exec>
+				Record newMove = new Record(lastMove);
+				newMove:movement:steps = event:sem:number;
+			</exec>
+			<raise event="chess.move.user" p:move="newMove"/>
+		</d:onSpeech>
+	</state>
+
+	<state id="ClarifyDirection" extends="AwaitUser">
+		<param name="lastMove" type="Record"/>
+		<onEntry>
+			<d:say>In which direction?</d:say>
+			<d:listen/>
+		</onEntry>
+		<d:onSpeech sem="'direction'">
+			<exec>
+				Record newMove = new Record(lastMove);
+				newMove:movement:direction = event:sem:direction;
+			</exec>
+			<raise event="chess.move.user" p:move="newMove"/>
+		</d:onSpeech>
+	</state>
+
+	<state id="ClarifyPiece" extends="AwaitUser">
+		<param name="lastMove" type="Record"/>
+		<param name="piece"/> 
+		<onEntry>
+			<d:say>Which <expr>piece</expr>?</d:say>
+			<d:listen/>
+		</onEntry>
+		<d:onSpeech sem="'piece'">
+			<exec>
+				Record newMove = new Record(lastMove);
+				newMove:piece = event:sem:piece;
+			</exec>
+			<raise event="chess.move.user" p:move="newMove"/>
+		</d:onSpeech>
+	</state>
+	
+	<state id="ClarifySquare" extends="AwaitUser">
+		<param name="lastMove" type="Record"/>
+		<onEntry>
+			<d:say>To which square?</d:say>
+			<d:listen/>
+		</onEntry>
+		<d:onSpeech sem="'piece:square'">
+			<exec>
+				Record newMove = new Record(lastMove);
+				newMove:movement:square = event:sem:piece:square;
+			</exec>
+			<raise event="chess.move.user" p:move="newMove"/>
+		</d:onSpeech>
+	</state>
+
+	<state id="AwaitSystem" extends="Game">
+		<onEvent name="chess.move.system">
+			<goto state="AwaitUser" />
+		</onEvent>
+	</state>
+
+</flow>

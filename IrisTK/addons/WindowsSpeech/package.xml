@@ -1,0 +1,11 @@
+<package name="WindowsSpeech">
+	<provide>
+		<class type="iristk.speech.Synthesizer" name="iristk.speech.windows.WindowsSynthesizer"/>
+		<class type="iristk.speech.Recognizer" name="iristk.speech.windows.WindowsRecognizer"/>
+	</provide>
+	<classpath>
+		<src path="src" output="bin"/>
+		<lib path="lib/jni4net.j-0.8.6.0.jar"/>
+		<lib path="lib/WindowsSpeech.j4n.jar"/>
+	</classpath>
+</package>

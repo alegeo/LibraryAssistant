@@ -1,0 +1,8 @@
+<package name="EMBR">
+	<provide>
+		<class type="iristk.system.IrisModule" name="iristk.agent.embr.EMBRModule"/>
+	</provide>
+	<classpath>
+		<src path="src" output="bin"/>
+	</classpath>	
+</package>

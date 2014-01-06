@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flow name="SimpleDialog" package="iristk.dialog" xmlns="iristk.flow"
+	xmlns:p="iristk.flow.param" xmlns:editor="iristk.flow.editor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="iristk.flow flow.xsd">
+
+	<import class="iristk.parser.cfg.Parser"/>
+
+	<action-template id="say" static="true">
+		<param name="text" />
+		<call state="Speaking" p:text="text" />
+	</action-template>
+	
+	<action-template id="listen" static="true">
+		<param name="timeout" type="int" default="8000"/>
+		<call state="Listening" p:timeout="timeout" />
+	</action-template>
+	
+	<catch-template id="onSpeech" static="true" event="sense.speech.rec.final" 
+		cond="(text == null and sem == null) or (text != null and bool(((Parser)event:parser).find(text))) or (sem != null and event.has('sem:' + sem))">
+		<param name="sem"/>
+		<param name="text"/>
+	</catch-template>
+	
+	<catch-template id="onNoSpeech" static="true" event="sense.speech.rec.nospeech"/>
+	
+	<state id="Speaking" static="true">
+		<param name="text" />
+		<var name="actionId"/>
+		<onEntry>
+			<send event="action.speech" bindId="actionId" p:text="text" />
+		</onEntry>
+		<onEvent name="monitor.speech.end" cond="eq(actionId,event:action)">
+			<return />
+		</onEvent>
+	</state>
+
+	<state id="Listening" static="true">
+		<param name="timeout" type="int" default="8000"/>
+		<var name="actionId"/>
+		<onEntry>
+			<send event="action.listen" bindId="actionId" p:timeout="timeout"/>
+		</onEntry>
+		<onEvent name="sense.speech.rec.**" cond="eq(event:action,actionId)">
+			<return copy="event"/>
+		</onEvent>
+		<onExit>
+			<send event="action.listen.stop"/>
+		</onExit>
+	</state>
+	
+</flow>

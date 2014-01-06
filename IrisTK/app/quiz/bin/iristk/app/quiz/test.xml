@@ -1,0 +1,23 @@
+<grammar xml:lang="en-US" version="1.0" root="root"
+	xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+	<rule id="root" scope="public">
+		<one-of>
+			<item>
+				Chess
+				<tag>out.answer="answer1"</tag>
+			</item>
+			<item>
+				Formula One
+				<tag>out.answer="answer2"</tag>
+			</item>
+			<item>
+				Darts
+				<tag>out.answer="answer3"</tag>
+			</item>
+			<item>
+				Skiing
+				<tag>out.answer="answer4"</tag>
+			</item>
+		</one-of>
+	</rule>
+</grammar>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xml:lang="en-US" version="1.0" root="srgs_root"
+	xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.w3.org/2001/06/grammar srgs.xsd" tag-format="semantics/1.0">
+	
+	<rule id="srgs_root" scope="public">
+		<one-of>
+			<item><ruleref uri="#yes"/><tag>out.yes=1</tag></item>
+			<item><ruleref uri="#no"/><tag>out.no=1</tag></item>
+			<item><ruleref uri="#dontknow"/><tag>out.dontknow=1</tag></item>
+		</one-of>
+	</rule> 
+
+	<rule id="yes" scope="public">
+		<one-of>
+			<item>yes</item>
+			<item>sure</item>
+		</one-of>
+	</rule>
+
+	<rule id="no" scope="public">
+		<one-of>
+			<item>no</item>
+			<item>I don't think so</item>
+		</one-of>
+	</rule>
+	
+	<rule id="dontknow" scope="public">
+		<one-of>
+			<item>i don't know</item>
+			<item>i have no idea</item>
+		</one-of>
+	</rule>
+	
+</grammar>

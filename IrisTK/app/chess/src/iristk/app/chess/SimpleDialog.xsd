@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema elementFormDefault="qualified"
+    targetNamespace="iristk.dialog.SimpleDialog"
+    xmlns="http://www.w3.org/2001/XMLSchema" xmlns:flow="iristk.flow">
+    <import namespace="iristk.flow" schemaLocation="flow.xsd"/>
+    <element name="say">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+            <attribute name="text" type="string"/>
+        </complexType>
+    </element>
+    <element name="listen">
+        <complexType mixed="true">
+            <sequence>
+                <any maxOccurs="unbounded" minOccurs="0"
+                    namespace="##any" processContents="lax"/>
+            </sequence>
+            <attribute default="8000" name="timeout" type="string"/>
+        </complexType>
+    </element>
+    <element name="onSpeech">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <attribute name="sem" type="string"/>
+                    <attribute name="text" type="string"/>
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="onNoSpeech">
+        <complexType>
+            <complexContent>
+                <extension base="flow:actionSequenceType">
+                    <anyAttribute namespace="##other"/>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+</schema>

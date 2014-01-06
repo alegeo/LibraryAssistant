@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flow name="MultiParty" package="iristk.dialog" 
+	initial="Init" xmlns="iristk.flow" xmlns:p="iristk.flow.param"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="iristk.flow flow.xsd">
+	
+	<import class="iristk.parser.cfg.Parser"/>
+	 	
+	<var name="users" type="UserModel" value="new UserModel()"/>
+	<var name="blinkClock" type="EventClock"/>
+ 
+	<state id="Init">
+		<onEntry>
+			<exec>
+				blinkClock = new EventClock(flowRunner, 1000, 5000, "blink");
+			</exec>
+			<goto state="Idle"/>
+		</onEntry>
+	</state>
+
+	<state id="Attention">	
+		<onEvent name="action.attend" cond="eq(event:target,'nobody')">
+			<goto state="Idle"/>
+		</onEvent>
+		<onEvent name="action.attend" cond="eq(event:target,'asleep')">
+			<goto state="Asleep"/>
+		</onEvent>
+		<onEvent name="action.attend" cond="eq(event:target,'all')">
+			<goto state="AttendingAll"/>
+		</onEvent>
+		<onEvent name="action.attend" cond="eq(event:target,'spot')">
+			<goto state="AttendingSpot" params="event"/>
+		</onEvent>
+		<onEvent name="action.attend" cond="users:(event:target)">
+			<goto state="AttendingAgent" params="event"/>
+		</onEvent>
+		<onEvent name="sense.body">
+			<if cond="event:location">
+				<if cond="event:proximate">
+					<if cond="!bool(users:(event:agent))">
+						<exec>users:(event:agent) = new User(event:agent, event:location)</exec>	
+						<send event="sense.enter" p:agent="event:agent" p:location="event:location"/>
+					</if>
+				<else/>
+					<if cond="users:(event:agent)">
+						<exec>users.remove(event:agent)</exec>	
+						<if cond="users.isAttending(event:agent) || users.isAttendingAll()">
+							<send event="sense.leave.attending" p:agent="event:agent" p:location="event:location"/>
+						<else/>
+							<send event="sense.leave.other" p:agent="event:agent" p:location="event:location"/>
+						</if>
+					</if>
+				</if>
+			</if>
+			<if cond="users:(event:agent)">
+				<exec>
+					users:(event:agent):x = float(event:x);
+					users:(event:agent):y = float(event:y);
+					if (bool(event:age)) {
+						users:(event:agent):age = event:age;
+					}
+				</exec>
+				<raise event="changePosition"/>
+			</if>
+		</onEvent>
+		<onEvent name="blink">
+			<send event="action.gesture" p:name="'blink'"/>
+		</onEvent>
+	</state> 
+	 
+	<state id="Idle" extends="Attention">
+		<onEntry>
+			<send event="action.gaze" p:x="0" p:y="-8" p:mode="'headpose'"/>
+			<send event="monitor.attend" p:target="'nobody'"/>
+		</onEntry>
+	</state> 
+	
+	<state id="AttendingAll" extends="Attention">
+		<var name="gazeTarget" type="User" value="users.random()"/>
+		<onEntry>
+			<exec>
+				User user1 = users.random();
+				User user2 = users.other(user1);
+			</exec>
+			<send event="action.gaze" p:x="float(user1:x) + ((float(user2:x) - float(user1:x)) / 2)" p:y="float(user1:y) + ((float(user2:y) - float(user1:y)) / 2)" p:mode="'headpose'"/>
+			<send event="monitor.attend" p:target="'all'"/>
+			<raise event="gazeShift" delay="1000"/>
+		</onEntry>
+		<onEvent name="gazeShift" cond="users.hasMultiUsers()">
+			<exec>gazeTarget = users.other(gazeTarget)</exec>
+			<send event="action.gaze" p:x="users:(gazeTarget:id):x" p:y="users:(gazeTarget:id):y" p:mode="'eyes'"/>
+			<raise event="gazeShift" delay="1000"/>
+		</onEvent>
+	</state> 
+	 
+	<state id="AttendingAgent" extends="Attention">
+		<param name="target"/>
+		<param name="mode" default="'headpose'"/>
+		<onEntry>
+			<send event="action.gaze" p:x="users:(target):x" p:y="users:(target):y" p:mode="mode"/>
+			<send event="monitor.attend" p:target="target"/>
+		</onEntry>
+		<onEvent name="changePosition">
+			<if cond="users.has(target) and eq(mode,'headpose')">
+				<send event="action.gaze" p:x="users:(target):x" p:y="users:(target):y"/>
+			</if>
+		</onEvent>
+		<onEvent name="sense.speech.start" cond="users.isAttendingLocation(event:location)">
+			<send event="action.gesture" p:name="'smile'"/>
+		</onEvent>
+	</state>
+	 
+	<state id="AttendingSpot" extends="Attention">
+		<param name="x" type="float" default="0"/>
+		<param name="y" type="float" default="0"/>
+		<param name="mode" default="'default'"/>
+		<onEntry>
+			<send event="action.gaze" p:x="x" p:y="y" p:mode="mode"/>
+		</onEntry>
+		<onEvent name="action.attend" cond="eq(event:target,'spot')">
+			<send event="action.gaze" p:x="event:x" p:y="event:y" p:mode="string(event:mode, 'default')"/>
+		</onEvent>
+	</state> 
+	 
+	<state id="Asleep" extends="Attention">
+		<onEntry>
+			<send event="action.gaze" p:x="0" p:y="-15" p:mode="'headpose'"/>
+			<send event="action.gesture" p:name="'sleep'"/>
+		</onEntry>
+		<onExit>
+			<send event="action.gesture" p:name="'blink'"/>
+		</onExit>
+		<onEvent name="blink"/>
+	</state>
+
+	<action-template id="attend">
+		<param name="mode" default="'headpose'"/>
+		<param name="target" default="'nobody'"/>
+		<exec>users.setAttending(target)</exec>
+		<send event="action.attend" p:target="target" p:mode="mode"/>
+	</action-template>
+	
+	<action-template id="attendNobody">
+		<exec>users.setAttending("nobody")</exec>
+		<send event="action.attend" p:target="'nobody'"/>
+	</action-template>
+	
+	<action-template id="attendRandom">
+		<var name="random" value="users.random().id()"/>
+		<exec>users.setAttending(random)</exec>
+		<send event="action.attend" p:target="random"/> 
+	</action-template>
+	
+	<action-template id="attendOther">
+		<param name="mode" default="'headpose'"/>
+		<var name="other" value="users.other().id()"/>
+		<exec>users.setAttending(other)</exec>
+		<send event="action.attend" p:target="other" p:mode="mode"/>
+	</action-template>
+	
+	<action-template id="attendAll">
+		<exec>users.setAttendingAll()</exec>
+		<send event="action.attend" p:target="'all'"/>
+	</action-template>
+	
+	<action-template id="attendAsleep">
+		<exec>users.setAttending("asleep")</exec>
+		<send event="action.attend" p:target="'asleep'"/>
+	</action-template>
+
+	<action-template id="say">
+		<param name="text"/>
+		<call state="Speaking" p:text="text"/>
+	</action-template>
+
+	<state id="Speaking">
+		<param name="text"/>
+		<var name="actionId"/>
+		<onEntry>
+			<send event="action.speech" p:text="text" bindId="actionId"/>
+		</onEntry>
+		<onEvent name="monitor.speech.start">
+			<send event="action.gesture" p:name="'brow_raise'"/>
+		</onEvent>
+		<onEvent name="monitor.speech.end" cond="eq(event:action,actionId)">
+			<return />
+		</onEvent>
+		<onExit>
+			<send event="action.speech.stop"/>
+		</onExit>
+	</state>
+	
+	<action-template id="listen">
+		<param name="timeout" type="int" default="8000"/>
+		<param name="grammar" type="Object"/>
+		<call state="Listening" p:timeout="timeout" p:grammar="grammar"/>
+	</action-template>
+	
+	<catch-template id="onEnterAgent" event="sense.enter"/>
+	
+	<catch-template id="onLeaveAttending" event="sense.leave.attending"/>
+	
+	<catch-template id="onLeaveOther" event="sense.leave.other"/>
+	
+	<catch-template id="onNoSpeech" event="sense.speech.multirec.nospeech"/>
+	
+	<catch-template id="onSpeech" event="sense.speech.multirec.final" cond="(eq(agent,'any') or eq(agent,event:agent)) and ((text == null and sem == null) or (text != null and bool(((Parser)event:parser).find(text))) or (sem != null and event.has('sem:' + sem)))">
+		<param name="agent" default="'attending'">
+			<alt>'any'</alt>
+			<alt>'attending'</alt>
+			<alt>'other'</alt>
+			<alt>'both'</alt>
+			<alt>'nobody'</alt>
+		</param>
+		<param name="text"/>
+		<param name="sem"/>	
+	</catch-template>
+	
+	<state id="Listening">
+		<param name="timeout" type="int" default="8000"/>
+		<param name="grammar" type="Object"/>
+		<var name="actionId"/>
+		<var name="speakers" type="int" value="0"/>
+		<var name="agent1" type="Record" value="null"/>
+		<onEntry>
+			<if cond="grammar != null">
+				<send event="action.listen" p:timeout="timeout" p:grammar="grammar"/>
+				<else/>
+				<send event="action.listen" p:timeout="timeout"/>
+			</if>
+		</onEntry>
+		<onEvent name="sense.speech.start">
+			<exec>speakers++</exec>
+		</onEvent>
+		<onEvent name="sense.speech.rec.nospeech" cond="speakers == 0">
+			<return event="sense.speech.multirec.nospeech"/>
+		</onEvent>
+		<onEvent name="sense.speech.rec.final">
+			<if cond="users.hasMultiUsers() and speakers == 2">
+				<if cond="users.isAttendingAll()">
+					<if cond="agent1 == null">
+						<exec>agent1 = event; agent1:agent = users.userAt(event:location).id()</exec>
+					<else/>
+						<var name="agent2" type="Record" value="event"/>
+						<exec>agent2:agent = users.userAt(event:location).id()</exec>
+						<return event="sense.speech.multirec.final" p:agent="'both'" p:agent1="agent1" p:agent2="agent2"/>	
+					</if>
+				<elseif cond="users.isAttendingLocation(event:location)" />
+					<return event="sense.speech.multirec.final" copy="event" p:agent="'attending'" />
+				<else />
+					<exec>speakers--</exec>
+				</if>
+			<else />
+				<if cond="users.isAttendingAll()">
+					<exec>users.setAttending(users.userAt(event:location).id())</exec>
+					<send event="action.attend" p:target="users.userAt(event:location).id()" p:mode="'headpose'"/>
+					<return event="sense.speech.multirec.final" copy="event" p:agent="'attending'" />
+				<elseif cond="!users.hasMultiUsers() or users.isAttendingLocation(event:location)" />
+					<return event="sense.speech.multirec.final" copy="event" p:agent="'attending'" />
+				<elseif cond="users.hasUserAt(event:location)" />
+					<return event="sense.speech.multirec.final" copy="event" p:agent="'other'" />
+				<else />
+					<return event="sense.speech.multirec.final" copy="event" p:agent="'nobody'" />
+				</if>
+			</if>
+		</onEvent>
+		<onExit>
+			<send event="action.listen.stop"/>
+		</onExit>
+	</state> 
+	 
+</flow>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<classpathentry kind="lib" path="addons/Nuance9/bin"/>
+<classpathentry kind="lib" path="addons/EMBR/bin"/>
+<classpathentry kind="src" output="app/quiz/bin" path="app/quiz/src"/>
+<classpathentry kind="lib" path="app/chess/bin"/>
+<classpathentry kind="lib" path="core/bin"/>
+<classpathentry kind="lib" path="core/lib/commons.jar"/>
+<classpathentry kind="lib" path="core/lib/platform.jar"/>
+<classpathentry kind="lib" path="core/lib/jna.jar"/>
+<classpathentry kind="lib" path="core/lib/jnaerator-0.9.5.jar"/>
+<classpathentry kind="lib" path="core/lib/jung-2.0.jar"/>
+<classpathentry kind="lib" path="core/lib/rhino-1.7.jar"/>
+<classpathentry kind="lib" path="core/lib/JAsioHost.jar"/>
+<classpathentry kind="lib" path="core/lib/jportaudio.jar"/>
+<classpathentry kind="lib" path="core/lib/json.jar"/>
+<classpathentry kind="lib" path="core/lib/jetty.jar"/>
+<classpathentry kind="lib" path="addons/Cereproc/bin"/>
+<classpathentry kind="lib" path="addons/WindowsSpeech/bin"/>
+<classpathentry kind="lib" path="addons/WindowsSpeech/lib/jni4net.j-0.8.6.0.jar"/>
+<classpathentry kind="lib" path="addons/WindowsSpeech/lib/WindowsSpeech.j4n.jar"/>
+<classpathentry kind="output" path="core/bin"/>
+</classpath>

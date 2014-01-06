@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema targetNamespace="iristk.phones"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:phones="iristk.phones">
+	<element name="phones">
+		<complexType>
+			<sequence>
+				<element name="phone" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<attribute name="name" type="string" />
+						<attribute name="start" type="float" />
+						<attribute name="end" type="float" />
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>	
+</schema>

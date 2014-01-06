@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<grammar xmlns="http://www.w3.org/2001/06/grammar" root="srgs_root">
+	<rule id="srgs_root">
+		<one-of>
+			<item>
+				<ruleref />
+				<tag>out=rules.ellipse</tag>
+			</item>
+			<item>
+				<ruleref />
+				<tag>out=rules.command</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="command">
+		<one-of>
+			<item>
+				<ruleref />
+				<ruleref />
+				<tag>out.act_move=true;out.piece=rules.np_piece_ref</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<ruleref />
+				<tag>out.act_move=true;out.piece=rules.np_piece_ref</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<ruleref />
+				<tag>out.act_move=true;out.piece=rules.np_piece_ref;out.movement=rules.movement
+				</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<tag>out.act_move=true;out.capture=rules.np_piece_ref</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<ruleref />
+				<ruleref />
+				<tag>out.act_move=true;out.capture=rules.np_piece_ref;out.piece=rules.np_piece
+				</tag>
+			</item>
+			<item>
+				yes
+				<tag>out.act_yes=true</tag>
+			</item>
+			<item>
+				no
+				<tag>out.act_no=true</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="ellipse">
+		<one-of>
+			<item>
+				<ruleref />
+				<tag>out.number=rules.number</tag>
+			</item>
+			<item>
+				<ruleref />
+				<tag>out.direction=rules.direction</tag>
+			</item>
+			<item>
+				<ruleref />
+				<tag>out.piece=rules.np_piece</tag>
+			</item>
+		</one-of>
+		<tag>out.ellipse=true</tag>
+	</rule>
+	<rule id="movement">
+		<one-of>
+			<item>
+				<ruleref />
+				<ruleref />
+				<tag>out.steps=rules.number</tag>
+			</item>
+			<item>
+				<ruleref />
+				<tag>out.direction=rules.direction</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<ruleref />
+				<tag>out.steps=rules.number;out.direction=rules.direction</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<tag>out.square=rules.square</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="relPiecePos">
+		<item>
+			<ruleref />
+			<ruleref />
+			<tag>out.rel=rules.direction_relative;out.piece=rules.np_piece</tag>
+		</item>
+	</rule>
+	<rule id="relPiecePosSimp">
+		<item>
+			<ruleref />
+			<ruleref />
+			<tag>out.rel=rules.direction_relative;out.piece=rules.np_piece_simp
+			</tag>
+		</item>
+	</rule>
+	<rule id="np_piece_simp">
+		<item>
+			<ruleref />
+			<ruleref />
+			<tag>out.type=rules.piece</tag>
+		</item>
+	</rule>
+	<rule id="np_piece">
+		<one-of>
+			<item>
+				<ruleref />
+				<ruleref />
+				<tag>out.type=rules.piece</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<item repeat="0-1">
+					<ruleref />
+				</item>
+				<ruleref />
+				<tag>out.type=rules.piece;out.relPiecePos=rules.relPiecePosSimp
+				</tag>
+			</item>
+			<item>
+				<ruleref />
+				<ruleref />
+				<ruleref />
+				<tag>out.type=rules.piece;out.relPos=rules.direction_extreme</tag>
+			</item>
+			<item>
+				<ruleref />
+				<tag>out.square=rules.square</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="np_piece_ref">
+		<one-of>
+			<item>
+				<ruleref />
+				<tag>out=rules.np_piece</tag>
+			</item>
+			<item>
+				<ruleref />
+			</item>
+		</one-of>
+	</rule>
+	<rule id="square">
+		<item>
+			<ruleref />
+			<ruleref />
+			<tag>out.column=rules.column;out.row=rules.number</tag>
+		</item>
+	</rule>
+	<rule id="aux_again">
+		<one-of>
+			<item>again</item>
+			<item>once more</item>
+		</one-of>
+	</rule>
+	<rule id="aux_standing">
+		<one-of>
+			<item>standing</item>
+			<item>that stands</item>
+			<item>that is standing</item>
+			<item>that is</item>
+		</one-of>
+	</rule>
+	<rule id="aux_steps">
+		<one-of>
+			<item>step</item>
+			<item>steps</item>
+		</one-of>
+	</rule>
+	<rule id="aux_to">to</rule>
+	<rule id="aux_with">with</rule>
+	<rule id="capture">
+		<one-of>
+			<item>take</item>
+			<item>capture</item>
+		</one-of>
+	</rule>
+	<rule id="column">
+		<one-of>
+			<item>
+				a
+				<tag>A</tag>
+			</item>
+			<item>
+				alpha
+				<tag>A</tag>
+			</item>
+			<item>
+				b
+				<tag>B</tag>
+			</item>
+			<item>
+				bravo
+				<tag>B</tag>
+			</item>
+			<item>
+				c
+				<tag>C</tag>
+			</item>
+			<item>
+				charlie
+				<tag>C</tag>
+			</item>
+			<item>
+				d
+				<tag>D</tag>
+			</item>
+			<item>
+				delta
+				<tag>D</tag>
+			</item>
+			<item>
+				e
+				<tag>E</tag>
+			</item>
+			<item>
+				echo
+				<tag>E</tag>
+			</item>
+			<item>
+				f
+				<tag>F</tag>
+			</item>
+			<item>
+				foxtrot
+				<tag>F</tag>
+			</item>
+			<item>
+				g
+				<tag>G</tag>
+			</item>
+			<item>
+				golf
+				<tag>G</tag>
+			</item>
+			<item>
+				h
+				<tag>H</tag>
+			</item>
+			<item>
+				hotel
+				<tag>H</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="determiner">
+		<one-of>
+			<item>the</item>
+			<item>the same</item>
+		</one-of>
+	</rule>
+	<rule id="direction">
+		<one-of>
+			<item>
+				forward
+				<tag>Forward</tag>
+			</item>
+			<item>
+				ahead
+				<tag>Forward</tag>
+			</item>
+			<item>
+				backwards
+				<tag>Backward</tag>
+			</item>
+			<item>
+				to the left
+				<tag>Left</tag>
+			</item>
+			<item>
+				left
+				<tag>Left</tag>
+			</item>
+			<item>
+				to the right
+				<tag>Right</tag>
+			</item>
+			<item>
+				right
+				<tag>Right</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="direction_extreme">
+		<one-of>
+			<item>
+				left
+				<tag>Left</tag>
+			</item>
+			<item>
+				right
+				<tag>Right</tag>
+			</item>
+			<item>
+				front
+				<tag>Front</tag>
+			</item>
+			<item>
+				back
+				<tag>Back</tag>
+			</item>
+			<item>
+				middle
+				<tag>Middle</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="direction_relative">
+		<one-of>
+			<item>
+				on the left side of
+				<tag>LeftOf</tag>
+			</item>
+			<item>
+				on the right side of
+				<tag>RightOf</tag>
+			</item>
+			<item>
+				in front of
+				<tag>FrontOf</tag>
+			</item>
+			<item>
+				behind
+				<tag>Behind</tag>
+			</item>
+			<item>
+				next to
+				<tag>NextTo</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="move">move</rule>
+	<rule id="number">
+		<one-of>
+			<item>
+				one
+				<tag>1</tag>
+			</item>
+			<item>
+				two
+				<tag>2</tag>
+			</item>
+			<item>
+				three
+				<tag>3</tag>
+			</item>
+			<item>
+				four
+				<tag>4</tag>
+			</item>
+			<item>
+				five
+				<tag>5</tag>
+			</item>
+			<item>
+				six
+				<tag>6</tag>
+			</item>
+			<item>
+				seven
+				<tag>7</tag>
+			</item>
+			<item>
+				eight
+				<tag>8</tag>
+			</item>
+			<item>1</item>
+			<item>2</item>
+			<item>3</item>
+			<item>4</item>
+			<item>5</item>
+			<item>6</item>
+			<item>7</item>
+			<item>8</item>
+		</one-of>
+	</rule>
+	<rule id="piece">
+		<one-of>
+			<item>
+				king
+				<tag>King</tag>
+			</item>
+			<item>
+				queen
+				<tag>Queen</tag>
+			</item>
+			<item>
+				pawn
+				<tag>Pawn</tag>
+			</item>
+			<item>
+				knight
+				<tag>Knight</tag>
+			</item>
+			<item>
+				horse
+				<tag>Knight</tag>
+			</item>
+			<item>
+				rook
+				<tag>Rook</tag>
+			</item>
+			<item>
+				bishop
+				<tag>Bishop</tag>
+			</item>
+			<item>
+				piece
+				<tag>Piece</tag>
+			</item>
+			<item>
+				one
+				<tag>Piece</tag>
+			</item>
+		</one-of>
+	</rule>
+	<rule id="pron">it</rule>
+</grammar>

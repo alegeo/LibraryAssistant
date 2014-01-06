@@ -1,0 +1,21 @@
+<package name="Cereproc">
+	<provide>
+		<class type="iristk.speech.Synthesizer" name="iristk.speech.cereproc.CereVoiceSynthesizer"/>
+		<class type="iristk.system.IrisModule" name="iristk.speech.cereproc.CereVoiceModule"/>
+	</provide>
+	<classpath>
+		<src path="src" output="bin"/>
+		<dll path="lib/x64/w64gcc_s_sjlj-1.dll" arch="64"/>
+		<dll path="lib/x64/libstdc++-6.dll" arch="64"/>
+		<dll path="lib/x64/libcerevoice_shared-3.dll" arch="64"/>
+		<dll path="lib/x64/libcerehts_shared-3.dll" arch="64"/>
+		<dll path="lib/x64/libcerevoice_pmod_shared-3.dll" arch="64"/>
+		<dll path="lib/x64/libcerevoice_eng_shared-3.dll" arch="64"/>
+		<dll path="lib/x64/libcerevoice_aud_shared-3.dll" arch="64"/>
+		<dll path="lib/libcerevoice_shared-3.dll" arch="32"/>
+		<dll path="lib/libcerehts_shared-3.dll" arch="32"/>
+		<dll path="lib/libcerevoice_pmod_shared-3.dll" arch="32"/>
+		<dll path="lib/libcerevoice_eng_shared-3.dll" arch="32"/>
+		<dll path="lib/libcerevoice_aud_shared-3.dll" arch="32"/>
+	</classpath>
+</package>

@@ -1,0 +1,8 @@
+<package name="quiz">
+	<run>
+		<program name="quiz" class="iristk.app.quiz.QuizSystem"/>
+	</run>
+	<classpath>
+		<src path="src" output="bin"/>
+	</classpath>
+</package>
